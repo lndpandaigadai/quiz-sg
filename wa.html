@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator Template WhatsApp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+    .card {
+      max-width: 600px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #25D366;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    textarea {
+      min-height: 120px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>📲 Generator Template WhatsApp</h2>
+
+  <label>Tujuan Pesan</label>
+  <select id="tujuan">
+    <option value="penagihan">Penagihan</option>
+    <option value="follow up">Follow Up</option>
+    <option value="informasi">Informasi</option>
+    <option value="promo">Promo</option>
+  </select>
+
+  <label>Nama Customer</label>
+  <input type="text" id="nama" placeholder="Contoh: Bapak Andri">
+
+  <label>Nama Perusahaan</label>
+  <input type="text" id="perusahaan" placeholder="Contoh: PT Pintarnya">
+
+  <label>Gaya Bahasa</label>
+  <select id="gaya">
+    <option value="formal">Formal</option>
+    <option value="semi formal">Semi Formal</option>
+    <option value="santai">Santai</option>
+  </select>
+
+  <button onclick="generateWA()">Buat Template</button>
+
+  <label>Hasil Template WA</label>
+  <textarea id="hasil" placeholder="Hasil akan muncul di sini..."></textarea>
+</div>
+
+<script>
+async function generateWA() {
+  const tujuan = document.getElementById("tujuan").value;
+  const nama = document.getElementById("nama").value;
+  const perusahaan = document.getElementById("perusahaan").value;
+  const gaya = document.getElementById("gaya").value;
+  const hasil = document.getElementById("hasil");
+
+  hasil.value = "⏳ Generating...";
+
+  const prompt = `
+Buatkan template pesan WhatsApp dengan ketentuan:
+- Tujuan: ${tujuan}
+- Nama customer: ${nama}
+- Nama perusahaan: ${perusahaan}
+- Gaya bahasa: ${gaya}
+- Bahasa Indonesia
+- Siap kirim ke customer
+`;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "sk-proj-hMqTpou3M3eGLb4YPtJNa2mI0hwGHKd_IXYR7BhLizHW7rFhv47TAW89a-ChTaj-vlZD6VmRqnT3BlbkFJYWVZeIWQDXXRNMMDSbX0Q7uIoi_Am7GxQ5WZNlM7cSQgx6G9qikdesM1Jso-Zc1mBZnMcA9tQAI"
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1-mini",
+        messages: [
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    const data = await response.json();
+    hasil.value = data.choices[0].message.content;
+
+  } catch (err) {
+    hasil.value = "❌ Gagal generate template";
+    console.error(err);
+  }
+}
+</script>
+
+</body>
+</html>
