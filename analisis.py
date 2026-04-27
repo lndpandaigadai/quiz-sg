@@ -4,7 +4,7 @@ import pandas as pd
 st.set_page_config(page_title="Dashboard Misgrading", layout="wide")
 st.title("📊 Dashboard Misgrading - Region 2")
 
-file_path = "Analisis need coaching rn 2egio.txt"
+file_path = "Analisis need coaching rn 2egio.csv"
 
 # ==============================
 # LOAD DATA
